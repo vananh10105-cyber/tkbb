@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Thời Khóa Biểu Của Vợ iuuuuuu</title>
+
+<style>
+body{margin:0;font-family:Arial;background:#f2f6f9}
+.header{background:#2e7d32;color:#fff;padding:14px;text-align:center;font-size:18px;font-weight:bold}
+.nav{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:10px 14px;background:#e8f5e9
+}
+.nav button{
+    border:none;background:#43a047;color:white;
+    padding:6px 12px;border-radius:8px;font-size:16px
+}
+.date{font-weight:bold;color:#1b5e20}
+.container{padding:14px}
+.card{
+    background:#fff;border-radius:12px;padding:12px 14px;
+    margin-bottom:12px;
+    box-shadow:0 3px 8px rgba(0,0,0,.1);
+    border-left:6px solid #43a047
+}
+.subject{font-size:16px;font-weight:bold}
+.meta{font-size:14px;color:#555;margin-top:4px}
+.teacher{font-size:14px;color:#0d652d;margin-top:4px}
+.empty{color:#777;text-align:center;margin-top:40px}
+</style>
+</head>
+
+<body>
+
+<div class="header">📅 Lịch học của vợ iuuuuuuuuuuuuuu</div>
+
+<div class="nav">
+    <button onclick="changeDay(-1)">←</button>
+    <div class="date" id="dateText"></div>
+    <button onclick="changeDay(1)">→</button>
+</div>
+
+<div class="container" id="schedule"></div>
+
+<script>
+// ===== TIẾT → GIỜ =====
+function timeFromPeriod(p){
+    if(p==="1-5") return "07:00 – 12:00";
+    if(p==="1-4") return "07:00 – 11:00";
+    if(p==="7-11") return "13:00 – 18:00";
+    if(p==="10-12") return "15:30 – 18:00";
+    return "";
+}
+
+// ===== DỮ LIỆU MÔN =====
+const subjects = [
+ {name:"Hình hoạ 2", days:[2,3], period:"1-5", room:"C",
+  start:"2026-02-23", end:"2026-04-12", teacher:"Ngô Thị Thu Hà"},
+
+ {name:"Tạo mẫu trang phục 1", days:[5], period:"7-11", room:"E705",
+  start:"2026-02-02", end:"2026-05-24", teacher:"Nguyễn Thị Lan Hương"},
+
+ {name:"Thực hành CN may 1", days:[4,6], period:"10-12", room:" E",
+  start:"2026-02-02", end:"2026-04-26", teacher:"Vũ Mai Hiên"},
+
+ {name:"Tiếng Anh 2", days:[5], period:"1-4", room:"E706",
+  start:"2026-02-02", end:"2026-05-10", teacher:"Phạm Thị Ngọc Bích"},
+
+ {name:"Trang trí cơ bản 2", days:[2,3], period:"1-5", room:"C",
+  start:"2026-04-13", end:"2026-05-31", teacher:"Triệu Thị Minh Nguyệt"}
+];
+
+// ===== NGÀY ĐANG XEM =====
+let currentDate = new Date();
+
+function render(){
+    const wrap = document.getElementById("schedule");
+    wrap.innerHTML = "";
+
+    const day = currentDate.getDay() === 0 ? 8 : currentDate.getDay() + 1;
+    const todayStr = currentDate.toISOString().split("T")[0];
+
+    document.getElementById("dateText").innerText =
+        currentDate.toLocaleDateString("vi-VN",{weekday:"long",day:"2-digit",month:"2-digit",year:"numeric"});
+
+    let count = 0;
+
+    subjects.forEach(s=>{
+        if(!s.days.includes(day)) return;
+        if(todayStr < s.start || todayStr > s.end) return;
+
+        count++;
+        wrap.innerHTML += `
+        <div class="card">
+            <div class="subject">${s.name}</div>
+            <div class="meta">🕒 ${s.period} • ${timeFromPeriod(s.period)}</div>
+            <div class="meta">📍 ${s.room}</div>
+            <div class="meta">📅 ${s.start.split("-").reverse().join("/")}
+             – ${s.end.split("-").reverse().join("/")}</div>
+            <div class="teacher">👩‍🏫 ${s.teacher}</div>
+        </div>`;
+    });
+
+    if(count===0){
+        wrap.innerHTML = `<div class="empty">📭 Hôm nay thích hợp để đi chơi với chòn iuuuuuu </div>`;
+    }
+}
+
+function changeDay(n){
+    currentDate.setDate(currentDate.getDate()+n);
+    render();
+}
+
+render();
+</script>
+
+</body>
+</html>
